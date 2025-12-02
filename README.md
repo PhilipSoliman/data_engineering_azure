@@ -1,0 +1,2 @@
+# Data Engineering with Azure
+This repository contains my work on the [Udacity course for data engineering with azure](https://www.udacity.com/course/data-engineering-with-microsoft-azure-nanodegree--nd0277). It contains notes, demo's, exercises and projects that I make, encounter and complete during the course.
