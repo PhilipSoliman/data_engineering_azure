@@ -1,2 +1,9 @@
 # virtual environment
 .venv
+
+# local package
+*.egg-info/
+**/*__pycache__
+
+# env
+**/*.env

@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools"]
+
+[project]
+name = "data_engineering_azure"
+version = "0.1.0"
+description = "Udacity course for data engineering with Azure"
+authors = [
+    { name = "Philip Soliman", email = "philipsoliman4133@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+dependencies = [
+    "psycopg2",
+    "pydantic",
+    "pydantic_settings",
+    "jupyter",
+    "ipykernel"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
+
+[tool.isort]
+profile = "black"
+
+[project.urls]
+Homepage = "https://github.com/PhilipSoliman/data_engineering_azure"
+Documentation = "https://github.com/PhilipSoliman/data_engineering_azure/blob/main/README.md"
+Source = "https://github.com/PhilipSoliman/data_engineering_azure"
