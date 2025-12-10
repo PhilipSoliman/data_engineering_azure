@@ -4,6 +4,7 @@
 # local package
 *.egg-info/
 **/*__pycache__
+uv.lock
 
 # env
 **/*.env
