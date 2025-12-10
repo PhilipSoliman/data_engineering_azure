@@ -1,6 +1,12 @@
 # Data Engineering with Azure
 This repository contains my work on the [Udacity course for data engineering with azure](https://www.udacity.com/course/data-engineering-with-microsoft-azure-nanodegree--nd0277). It contains notes, demo's, exercises and projects that I make, encounter and complete during the course.
 
+## Installation
+To set up the development environment (editable), you can use uv:
+```bash
+uv pip install -e .
+```
+
 ## Postgres Database setup
 To set up a local PostgreSQL database for development, you can use Docker Compose file included in this repository. Follow the steps below to get started:
 ```bash
