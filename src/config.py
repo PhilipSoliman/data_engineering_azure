@@ -2,8 +2,9 @@ import re
 from pathlib import Path
 from urllib.parse import quote
 
-from pydantic_settings import BaseSettings
 from pydantic import ConfigDict
+from pydantic_settings import BaseSettings
+
 
 class Settings(BaseSettings):
     # Directories
@@ -12,11 +13,14 @@ class Settings(BaseSettings):
 
     # Load values from .env file
     model_config = ConfigDict(env_file=APP_DIR / ".env")
-    DB_NAME: str
-    DB_USER: str
-    DB_PASSWORD: str
-    DB_HOST: str
-    DB_PORT: int
+    POSTGRES_DB_NAME: str
+    POSTGRES_DB_USER: str
+    POSTGRES_DB_PASSWORD: str
+    POSTGRES_DB_HOST: str
+    POSTGRES_DB_PORT: int
+    CASSANDRA_DB_HOST: str
+    CASSANDRA_DB_PORT: int
+    CASSANDRA_CLUSTER_NAME: str
 
 
 # Create a single instance to import everywhere
