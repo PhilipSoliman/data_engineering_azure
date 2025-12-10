@@ -20,6 +20,7 @@ dependencies = [
     "cassandra-driver",
     "isort",
     "black[jupyter]",
+    "nbstripout",
 ]
 
 [tool.setuptools.packages.find]

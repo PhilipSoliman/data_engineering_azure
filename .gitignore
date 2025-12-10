@@ -11,3 +11,6 @@ uv.lock
 
 # VSCode settings
 .vscode/
+
+# Jupyter Notebook checkpoints
+**/.ipynb_checkpoints
