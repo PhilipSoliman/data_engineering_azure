@@ -16,7 +16,10 @@ dependencies = [
     "pydantic",
     "pydantic_settings",
     "jupyter",
-    "ipykernel"
+    "ipykernel",
+    "cassandra-driver",
+    "isort",
+    "black",
 ]
 
 [tool.setuptools.packages.find]
