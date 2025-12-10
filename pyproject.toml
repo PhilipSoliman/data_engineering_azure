@@ -19,7 +19,7 @@ dependencies = [
     "ipykernel",
     "cassandra-driver",
     "isort",
-    "black",
+    "black[jupyter]",
 ]
 
 [tool.setuptools.packages.find]
