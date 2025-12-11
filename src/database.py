@@ -130,6 +130,16 @@ def create_cs_keyspace(
         print(e)
 
 
+def set_cs_keyspace(
+    session: cs_cluster.Session,
+    keyspace_name: str,
+) -> None:
+    try:
+        session.set_keyspace(keyspace_name)
+    except Exception as e:
+        print(e)
+
+
 def drop_cs_keyspace(session: cs_cluster.Session, keyspace_name: str) -> None:
     """Drop a Cassandra keyspace if it exists."""
     try:
