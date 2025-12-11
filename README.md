@@ -12,7 +12,11 @@ To set up a local PostgreSQL database for development, you can use Docker Compos
 ```bash
 docker compose -f docker-compose-postgres.yml up -d
 ```
-This provides a Postgres instance for local tests and maps container port 5432 to host 5433.
+This provides a Postgres instance for local tests and maps container port 5432 to host 5433. Correspondingly use:
+```bash
+docker-compose -f docker-compose-postgres.yml down
+```
+to stop and remove the Postgres container when not needed.
 
 
 ## Cassandra Database setup
@@ -20,7 +24,11 @@ Similarly use
 ```bash
 docker compose -f docker-compose-cassandra.yml up -d
 ```
-to set up a local Cassandra database consisting of 2 nodes for development. This maps container ports 9042,9043 and 9044 to host 9043.
+to set up a local Cassandra database consisting of 2 nodes for development. This maps container ports 9042,9043 and 9044 to host 9043. Correspondingly use:
+```bash
+docker-compose -f docker-compose-cassandra.yml down
+```
+to stop and remove the Cassandra containers when not needed.
 
 To check the status of a node 2 in the Cassandra cluster, you can use the following command:
 ```bash
