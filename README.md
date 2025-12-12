@@ -43,8 +43,13 @@ To customize for external databases:
 
 ### PostgreSQL
 
-Start a local PostgreSQL database using Docker Compose:
+Build a local PostgreSQL database using Docker Compose:
 
+```bash
+docker-compose -f docker-compose-postgres.yml build
+```
+
+Then start the PostgreSQL container:
 ```bash
 docker compose -f docker-compose-postgres.yml up -d
 ```
@@ -54,7 +59,6 @@ docker compose -f docker-compose-postgres.yml up -d
 - Use this for local development and testing
 
 To stop and remove the PostgreSQL container:
-
 ```bash
 docker compose -f docker-compose-postgres.yml down
 ```
@@ -62,8 +66,12 @@ docker compose -f docker-compose-postgres.yml down
 ### Cassandra
 > **Note:** Python 3.12 may not be compatible with the Cassandra driver library due to a missing dependency (libdev). Python 3.11 (or earlier) is recommended.
 
-Start a local Cassandra cluster with 2 nodes:
+Build a local Cassandra cluster with 2 nodes:
+```bash
+docker-compose -f docker-compose-cassandra.yml build
+```
 
+Then start the Cassandra containers:
 ```bash
 docker compose -f docker-compose-cassandra.yml up -d
 ```
