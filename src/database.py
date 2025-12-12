@@ -180,6 +180,7 @@ def create_cs_table(
             f"CREATE TABLE IF NOT EXISTS {table_name} "
             f"({col_defs}, PRIMARY KEY ({pk}))"
         )
+        print(cql) # to check
         session.execute(cql)
     except Exception as e:
         print(e)
