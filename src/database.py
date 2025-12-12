@@ -102,11 +102,19 @@ def insert_pg_rows(
         print(f"Error inserting rows: {e}")
 
 
-def get_cs_session() -> cs_cluster.Session:
+def get_cs_cluster() -> cs_cluster.Cluster:
     try:
         cluster = cs_cluster.Cluster(
             [settings.CASSANDRA_DB_HOST], port=settings.CASSANDRA_DB_PORT
         )
+    except Exception as e:
+        print(e)
+
+    return cluster
+
+
+def get_cs_session(cluster: cs_cluster.Cluster) -> cs_cluster.Session:
+    try:
         session = cluster.connect()
     except Exception as e:
         print(e)
@@ -218,4 +226,12 @@ def close_cs_session(session: cs_cluster.Session) -> None:
         session.shutdown()
     except Exception as e:
         print("Error: Could not close the Cassandra session")
+        print(e)
+
+
+def shutdown_cs_cluster(cluster: cs_cluster.Cluster) -> None:
+    try:
+        cluster.shutdown()
+    except Exception as e:
+        print("Error: Could not close the Cassandra cluster")
         print(e)
