@@ -21,6 +21,8 @@ dependencies = [
     "isort",
     "black[jupyter]",
     "nbstripout",
+    "numpy",
+    "pandas",
 ]
 
 [tool.setuptools.packages.find]
