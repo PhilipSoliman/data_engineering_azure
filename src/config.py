@@ -1,6 +1,4 @@
-import re
 from pathlib import Path
-from urllib.parse import quote
 
 from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
@@ -11,16 +9,18 @@ class Settings(BaseSettings):
     PROJECT_DIR: Path = Path(__file__).resolve().parent.parent
     APP_DIR: Path = PROJECT_DIR / "src"
 
-    # Load values from .env file
-    model_config = ConfigDict(env_file=APP_DIR / ".env")
-    POSTGRES_DB_NAME: str
-    POSTGRES_DB_USER: str
-    POSTGRES_DB_PASSWORD: str
-    POSTGRES_DB_HOST: str
-    POSTGRES_DB_PORT: int
-    CASSANDRA_DB_HOST: str
-    CASSANDRA_DB_PORT: int
-    CASSANDRA_CLUSTER_NAME: str
+    # Load values from .env file or defaults
+    model_config = ConfigDict(  # type: ignore
+        env_file=APP_DIR / ".env", env_file_encoding="utf-8", extra="ignore"
+    )
+    POSTGRES_DB_NAME: str = "postgres"
+    POSTGRES_DB_USER: str = "postgres"
+    POSTGRES_DB_PASSWORD: str = "postgres"
+    POSTGRES_DB_HOST: str = "localhost"
+    POSTGRES_DB_PORT: int = 5433
+    CASSANDRA_DB_HOST: str = "localhost"
+    CASSANDRA_DB_PORT: int = 9042
+    CASSANDRA_CLUSTER_NAME: str = "Test Cluster"
 
 
 # Create a single instance to import everywhere
