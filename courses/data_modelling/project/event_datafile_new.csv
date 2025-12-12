@@ -1,4 +1,4 @@
-"artist","firstName","gender","itemInSession","lastName","length","level","location","sessionId","song","userId"
+"artistName","userFirstName","userGender","itemInSession","userLastName","songLength","level","location","sessionId","songTitle","userId"
 "Des'ree","Kaylee","F","1","Summers","246.30812","free","Phoenix-Mesa-Scottsdale, AZ","139","You Gotta Be","8"
 "Mr Oizo","Kaylee","F","3","Summers","144.03873","free","Phoenix-Mesa-Scottsdale, AZ","139","Flat 55","8"
 "Tamba Trio","Kaylee","F","4","Summers","177.18812","free","Phoenix-Mesa-Scottsdale, AZ","139","Quem Quiser Encontrar O Amor","8"
