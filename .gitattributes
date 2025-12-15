@@ -1,3 +1,6 @@
 *.ipynb filter=nbstripout
 *.zpln filter=nbstripout
 *.ipynb diff=ipynb
+
+# Keep outputs for this notebook
+courses/data_modelling/project/Project_1B.ipynb -filter -diff
