@@ -64,7 +64,12 @@ docker compose -f docker-compose-postgres.yml down
 ```
 
 ### Pagila Sample Database
-To set up the Pagila sample database in PostgreSQL, please refer to the [Pagila README](pagila/README.md) for detailed installation instructions.
+To set up the Pagila sample database in PostgreSQL, please refer to the [Pagila README](pagila/README.md) for detailed installation instructions. TLDR; run 
+```bash
+docker-compose -f pagila/docker-compose.yml up -d
+```
+to start the Pagila database container.
+
 
 ### Cassandra
 > **Note:** Python 3.12 may not be compatible with the Cassandra driver library due to a missing dependency (libdev). Python 3.11 (or earlier) is recommended.
