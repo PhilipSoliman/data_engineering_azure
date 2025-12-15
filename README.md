@@ -63,6 +63,9 @@ To stop and remove the PostgreSQL container:
 docker compose -f docker-compose-postgres.yml down
 ```
 
+### Pagila Sample Database
+To set up the Pagila sample database in PostgreSQL, please refer to the [Pagila README](pagila/README.md) for detailed installation instructions.
+
 ### Cassandra
 > **Note:** Python 3.12 may not be compatible with the Cassandra driver library due to a missing dependency (libdev). Python 3.11 (or earlier) is recommended.
 
