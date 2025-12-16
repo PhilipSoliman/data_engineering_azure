@@ -1,21 +1,33 @@
 import cassandra.cluster as cs_cluster
+import pandas as pd
 import psycopg2
 import psycopg2.extensions as pg_ext
 
 from src.config import settings
 
 
-def get_pg_connection() -> pg_ext.connection:
+def get_pg_connection(sample_pagila: bool = False) -> pg_ext.connection:
+    conn = None
     try:
-        conn = psycopg2.connect(
-            dbname=settings.POSTGRES_DB_NAME,
-            user=settings.POSTGRES_DB_USER,
-            password=settings.POSTGRES_DB_PASSWORD,
-            host=settings.POSTGRES_DB_HOST,
-            port=settings.POSTGRES_DB_PORT,
-        )
+        if sample_pagila:
+            conn = psycopg2.connect(
+                dbname=settings.PAGILA_DB_NAME,
+                user=settings.PAGILA_DB_USER,
+                password=settings.PAGILA_DB_PASSWORD,
+                host=settings.PAGILA_DB_HOST,
+                port=settings.PAGILA_DB_PORT,
+            )
+        else:
+            conn = psycopg2.connect(
+                dbname=settings.POSTGRES_DB_NAME,
+                user=settings.POSTGRES_DB_USER,
+                password=settings.POSTGRES_DB_PASSWORD,
+                host=settings.POSTGRES_DB_HOST,
+                port=settings.POSTGRES_DB_PORT,
+            )
     except psycopg2.Error as e:
         print(f"Error connecting to the database: {e}")
+        raise
     return conn
 
 
@@ -34,6 +46,77 @@ def get_pg_cursor(conn: pg_ext.connection) -> pg_ext.cursor:
         print("Error: Could not get curser to the Database")
         print(e)
     return cur
+
+
+def execute_pg_query(
+    conn: pg_ext.connection,
+    query: str,
+    params: tuple | None = None,
+    fetch: int = -1,
+) -> pd.DataFrame:
+    """Execute a PostgreSQL query and return results as a pandas DataFrame.
+
+    Args:
+        conn: PostgreSQL connection object
+        query: SQL query string to execute
+        params: Optional tuple of parameters for parameterized queries
+        fetch: Number of rows to return. Use -1 for all rows (default),
+               0 to execute without fetching, or a positive integer for specific count
+
+    Returns:
+        pandas DataFrame containing query results. Empty DataFrame if fetch=0 or no results.
+
+    Examples:
+        # Fetch all results
+        df = execute_pg_query(conn, "SELECT * FROM film;")
+
+        # Fetch first 10 results
+        df = execute_pg_query(conn, "SELECT * FROM film;", fetch=10)
+
+        # Fetch one result
+        df = execute_pg_query(conn, "SELECT count(*) FROM film;", fetch=1)
+
+        # Execute without fetching (e.g., INSERT/UPDATE/DELETE)
+        execute_pg_query(conn, "DELETE FROM temp_table WHERE id = %s;", params=(123,), fetch=0)
+    """
+    try:
+        cur = get_pg_cursor(conn)
+        if params:
+            cur.execute(query, params)
+        else:
+            cur.execute(query)
+
+        if fetch == 0:
+            # No fetch needed (e.g., for INSERT/UPDATE/DELETE)
+            conn.commit()
+            results = []
+            column_names = []
+        elif fetch == -1:
+            # Fetch all rows
+            results = cur.fetchall()
+            column_names = (
+                [desc[0] for desc in cur.description] if cur.description else []
+            )
+        elif fetch == 1:
+            # Fetch one row
+            result = cur.fetchone()
+            results = [result] if result else []
+            column_names = (
+                [desc[0] for desc in cur.description] if cur.description else []
+            )
+        else:
+            # Fetch specific number of rows
+            results = cur.fetchmany(fetch)
+            column_names = (
+                [desc[0] for desc in cur.description] if cur.description else []
+            )
+
+        cur.close()
+        return pd.DataFrame(results, columns=column_names)
+    except psycopg2.Error as e:
+        conn.rollback()
+        print(f"Error executing query: {e}")
+        raise
 
 
 def create_pg_table(
@@ -180,7 +263,7 @@ def create_cs_table(
             f"CREATE TABLE IF NOT EXISTS {table_name} "
             f"({col_defs}, PRIMARY KEY ({pk}))"
         )
-        print(cql) # to check
+        print(cql)  # to check
         session.execute(cql)
     except Exception as e:
         print(e)
