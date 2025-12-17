@@ -1,4 +1,4 @@
-from typing import Literal, overload
+from typing import Literal, Optional, overload
 
 import cassandra.cluster as cs_cluster
 import pandas as pd
@@ -8,18 +8,10 @@ import psycopg2.extensions as pg_ext
 from src.config import settings
 
 
-def get_pg_connection(sample_pagila: bool = False) -> pg_ext.connection:
+def get_pg_connection(db: Optional[str] = None) -> pg_ext.connection:
     conn = None
     try:
-        if sample_pagila:
-            conn = psycopg2.connect(
-                dbname=settings.PAGILA_DB_NAME,
-                user=settings.PAGILA_DB_USER,
-                password=settings.PAGILA_DB_PASSWORD,
-                host=settings.PAGILA_DB_HOST,
-                port=settings.PAGILA_DB_PORT,
-            )
-        else:
+        if db is None:
             conn = psycopg2.connect(
                 dbname=settings.POSTGRES_DB_NAME,
                 user=settings.POSTGRES_DB_USER,
@@ -27,6 +19,25 @@ def get_pg_connection(sample_pagila: bool = False) -> pg_ext.connection:
                 host=settings.POSTGRES_DB_HOST,
                 port=settings.POSTGRES_DB_PORT,
             )
+        elif db == "pagila":
+            conn = psycopg2.connect(
+                dbname=settings.PAGILA_DB_NAME,
+                user=settings.PAGILA_DB_USER,
+                password=settings.PAGILA_DB_PASSWORD,
+                host=settings.PAGILA_DB_HOST,
+                port=settings.PAGILA_DB_PORT,
+            )
+        elif db == "citus":
+            conn = psycopg2.connect(
+                dbname=settings.CITUS_DB_NAME,
+                user=settings.CITUS_DB_USER,
+                password=settings.CITUS_DB_PASSWORD,
+                host=settings.CITUS_DB_HOST,
+                port=settings.CITUS_DB_PORT,
+            )
+        else:
+            raise ValueError(f"Unknown database '{db}'")
+
     except psycopg2.Error as e:
         print(f"Error connecting to the database: {e}")
         raise

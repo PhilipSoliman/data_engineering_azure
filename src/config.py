@@ -28,6 +28,13 @@ class Settings(BaseSettings):
     PAGILA_DB_HOST: str = "localhost"
     PAGILA_DB_PORT: int = 5435
 
+    # Pagila (PostgreSQL sample database) settings
+    CITUS_DB_NAME: str = "postgres"
+    CITUS_DB_USER: str = "postgres"
+    CITUS_DB_PASSWORD: str = "postgres"
+    CITUS_DB_HOST: str = "localhost"
+    CITUS_DB_PORT: int = 5436
+
     # Cassandra settings
     CASSANDRA_DB_HOST: str = "localhost"
     CASSANDRA_DB_PORT: int = 9042
