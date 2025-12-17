@@ -1,3 +1,5 @@
+from typing import Literal, overload
+
 import cassandra.cluster as cs_cluster
 import pandas as pd
 import psycopg2
@@ -48,12 +50,34 @@ def get_pg_cursor(conn: pg_ext.connection) -> pg_ext.cursor:
     return cur
 
 
+@overload
 def execute_pg_query(
     conn: pg_ext.connection,
     query: str,
     params: tuple | None = None,
     fetch: int = -1,
-) -> pd.DataFrame:
+    return_rows: Literal[False] = False,
+) -> pd.DataFrame: ...
+
+
+@overload
+def execute_pg_query(
+    conn: pg_ext.connection,
+    query: str,
+    params: tuple | None = None,
+    fetch: int = -1,
+    *,
+    return_rows: Literal[True],
+) -> list[tuple]: ...
+
+
+def execute_pg_query(
+    conn: pg_ext.connection,
+    query: str,
+    params: tuple | None = None,
+    fetch: int = -1,
+    return_rows: bool = False,
+) -> pd.DataFrame | list[tuple]:
     """Execute a PostgreSQL query and return results as a pandas DataFrame.
 
     Args:
@@ -112,7 +136,10 @@ def execute_pg_query(
             )
 
         cur.close()
-        return pd.DataFrame(results, columns=column_names)
+        if return_rows:
+            return results
+        else:
+            return pd.DataFrame(results, columns=column_names)
     except psycopg2.Error as e:
         conn.rollback()
         print(f"Error executing query: {e}")
