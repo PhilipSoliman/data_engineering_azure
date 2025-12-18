@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
@@ -34,6 +35,14 @@ class Settings(BaseSettings):
     CITUS_DB_PASSWORD: str = "postgres"
     CITUS_DB_HOST: str = "localhost"
     CITUS_DB_PORT: int = 5436
+
+    # Azure PostgreSQL settings (SENSITIVE - to be set in .env file)
+    AZURE_POSTGRES_DB_NAME: Optional[str] = None
+    AZURE_POSTGRES_DB_USER: Optional[str] = None
+    AZURE_POSTGRES_DB_PASSWORD: Optional[str] = None
+    AZURE_POSTGRES_DB_HOST: Optional[str] = None
+    AZURE_POSTGRES_DB_PORT: Optional[int] = None
+    AZURE_POSTGRES_SSL_MODE: Optional[str] = None
 
     # Cassandra settings
     CASSANDRA_DB_HOST: str = "localhost"

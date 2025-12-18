@@ -1,0 +1,49 @@
+%% Mermaid ER diagram for Divvy star schema
+%% View with any Mermaid renderer (e.g., VS Code Mermaid Preview)
+
+erDiagram
+    DIM_RIDER {
+        int rider_sk PK "surrogate key"
+        string rider_id
+        date birth_date
+        string member_status
+    }
+    DIM_STATION {
+        int station_sk PK
+        string station_id
+        string station_name
+        float latitude
+        float longitude
+    }
+    DIM_DATE {
+        int date_sk PK
+        date date
+    }
+    DIM_TIME {
+        int time_sk PK
+        time time
+    }
+    DIM_ACCOUNT {
+        int account_sk PK
+        string account_id
+    }
+    FACT_TRIP {
+        int trip_sk PK
+        string trip_id
+        float trip_duration_minutes
+        int rider_age_at_trip
+    }
+    FACT_PAYMENT {
+        int payment_sk PK
+        string payment_id
+        decimal payment_amount
+    }
+
+    DIM_RIDER ||--o{ FACT_TRIP : "rider_sk"
+    DIM_STATION ||--o{ FACT_TRIP : "start_station_sk / end_station_sk"
+    DIM_DATE ||--o{ FACT_TRIP : "start_date_sk / end_date_sk"
+    DIM_TIME ||--o{ FACT_TRIP : "start_time_sk / end_time_sk"
+    DIM_RIDER ||--o{ FACT_PAYMENT : "rider_sk"
+    DIM_ACCOUNT ||--o{ FACT_PAYMENT : "account_sk"
+    DIM_DATE ||--o{ FACT_PAYMENT : "payment_date_sk"
+    DIM_TIME ||--o{ FACT_PAYMENT : "payment_time_sk"
