@@ -26,14 +26,21 @@ WITH (
 )
 AS 
 SELECT
+    ROW_NUMBER() OVER (ORDER BY TRY_CAST(rider_id AS INT)) AS rider_sk,
     rider_id AS rider_key,
     first AS first,
     last AS last,
     address AS address,
-    CONVERT(INT, FORMAT(birthday,'yyyyMMdd')) AS birthday,
-    CONVERT(INT, FORMAT(account_start_date,'yyyyMMdd')) AS account_start_date,
-    CONVERT(INT, FORMAT(account_end_date,'yyyyMMdd')) AS account_end_date,
-    is_member AS is_member
+    CONVERT(INT, FORMAT(TRY_CAST(birthday AS DATETIME),'yyyyMMdd')) AS birthday_key,
+    CONVERT(INT, FORMAT(TRY_CAST(account_start_date AS DATETIME),'yyyyMMdd')) AS account_start_date_key,
+    CONVERT(INT, FORMAT(TRY_CAST(account_end_date AS DATETIME),'yyyyMMdd')) AS account_end_date_key,
+    CASE WHEN LOWER(ISNULL(is_member, '0')) IN ('1','true','yes','y') THEN 1 ELSE 0 END AS is_member,
+    -- age at account start (years); returns NULL if birthday or account_start_date invalid
+    CASE 
+    WHEN TRY_CAST(birthday AS DATE) IS NOT NULL AND TRY_CAST(account_start_date AS DATE) IS NOT NULL
+    THEN DATEDIFF(year, TRY_CAST(birthday AS DATE), TRY_CAST(account_start_date AS DATE))
+        ELSE NULL 
+    END AS rider_age_at_account_start
 FROM dbo.staging_rider
 GO
 
