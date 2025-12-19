@@ -26,7 +26,7 @@ WITH (
 )
 AS 
 SELECT
-    ROW_NUMBER() OVER (ORDER BY TRY_CAST(rider_id AS INT)) AS rider_sk,
+    ROW_NUMBER() OVER (ORDER BY TRY_CAST(rider_id AS INT)) AS rider_id,
     rider_id AS rider_key,
     first AS first,
     last AS last,
