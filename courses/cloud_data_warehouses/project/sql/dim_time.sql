@@ -26,7 +26,7 @@ WITH (
 )
 AS 
 SELECT
-    DISTINCT(DATEPART(hour, dts) * 60 + DATEPART(minute, dts)) AS time_sk,
+    DISTINCT(DATEPART(hour, dts) * 60 + DATEPART(minute, dts)) AS time_key,
     CONVERT(time, DATEADD(second, DATEPART(hour,dts)*3600 + DATEPART(minute,dts)*60, 0)) AS time,
     DATEPART(hour,dts) AS [hour],
     DATEPART(minute,dts) AS [minute],
