@@ -16,24 +16,23 @@ IF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'udacitydipd
 GO
 
 -- Uncomment to recreate table
--- DROP EXTERNAL TABLE dbo.staging_rider
-CREATE EXTERNAL TABLE dbo.staging_rider (
-	[rider_id] BIGINT,
-	[first] VARCHAR(50),
-	[last] VARCHAR(50),
-	[address] VARCHAR(100),
-	[birthday] DATETIME2,
-	[account_start_date] DATETIME2,
-	[account_end_date] DATETIME2,
-	[is_member] BIT
+-- DROP EXTERNAL TABLE dbo.staging_trip
+CREATE EXTERNAL TABLE dbo.staging_trip (
+	trip_id VARCHAR(50), 
+	rideable_type VARCHAR(75), 
+	start_at DATETIME2, 
+	ended_at DATETIME2, 
+	start_station_id VARCHAR(50), 
+	end_station_id VARCHAR(50), 
+	rider_id INTEGER
 	)
 	WITH (
-	LOCATION = 'public.rider.txt',
+	LOCATION = 'public.trip.txt',
 	DATA_SOURCE = [udacitydipdecourse_udacitydipdecourse_dfs_core_windows_net],
 	FILE_FORMAT = [SynapseDelimitedTextFormat]
 	)
 GO
 
 
-SELECT TOP 100 * FROM dbo.staging_rider
+SELECT TOP 100 * FROM dbo.staging_trip
 GO

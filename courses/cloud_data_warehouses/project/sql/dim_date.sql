@@ -26,7 +26,7 @@ WITH (
 )
 AS 
 SELECT
-    CONVERT(INT, FORMAT(d,'yyyyMMdd')) AS date_key,
+    DISTINCT(CONVERT(INT, FORMAT(d,'yyyyMMdd'))) AS date_key,
     d AS date_date,
     DATEPART(year, d) AS year,
     DATEPART(quarter, d) AS quarter,
@@ -44,6 +44,15 @@ FROM (
     SELECT TRY_CAST(account_start_date AS DATE) FROM dbo.staging_rider
     UNION ALL
     SELECT TRY_CAST(account_end_date AS DATE) FROM dbo.staging_rider
+    UNION ALL
+    SELECT TRY_CAST(birthday AS DATE) FROM dbo.staging_rider
+    UNION ALL
+    SELECT TRY_CAST(start_at AS DATE) FROM dbo.staging_trip
+    UNION ALL
+    SELECT TRY_CAST(ended_at AS DATE) FROM dbo.staging_trip
 ) t
 WHERE d IS NOT NULL
+GO
+
+SELECT TOP 100 * FROM dbo.dim_date
 GO
