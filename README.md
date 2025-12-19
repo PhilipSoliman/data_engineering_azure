@@ -73,6 +73,7 @@ cat pagila/pagila-data.sql | docker exec -i pagila psql -U postgres -d postgres
 
 ### Citus Sample Database 
 > **Note:** NOT WORKING YET: the download of sample citus data is outdated; simply returns a download page html.
+
 Run the following commands to set up the `customer_reviews` sample database in PostgreSQL:
 ```bash
 docker compose -f docker/docker-compose-citus.yml up -d
