@@ -31,7 +31,7 @@ SELECT
     first AS first,
     last AS last,
     address AS address,
-    CONVERT(INT, FORMAT(TRY_CAST(birthday AS DATETIME),'yyyyMMdd')) AS birthday_key,
+    birthday AS birthday_date,
     CONVERT(INT, FORMAT(TRY_CAST(account_start_date AS DATETIME),'yyyyMMdd')) AS account_start_date_key,
     CONVERT(INT, FORMAT(TRY_CAST(account_end_date AS DATETIME),'yyyyMMdd')) AS account_end_date_key,
     CASE WHEN LOWER(ISNULL(is_member, '0')) IN ('1','true','yes','y') THEN 1 ELSE 0 END AS is_member,
