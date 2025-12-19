@@ -2,7 +2,9 @@ import psycopg2 as pg
 
 from src.config import settings
 
-DATA_DIR = settings.PROJECT_DIR / "courses" / "cloud_data_warehouses" / "project" / "data"
+DATA_DIR = (
+    settings.PROJECT_DIR / "courses" / "cloud_data_warehouses" / "project" / "data"
+)
 
 dbname = settings.AZURE_POSTGRES_DB_NAME
 host = settings.AZURE_POSTGRES_DB_HOST
