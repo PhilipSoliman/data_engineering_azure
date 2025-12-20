@@ -47,7 +47,7 @@ Use this project rubric to understand and assess the project criteria.
 | Tips | Ensure the column names match the reference diagrams created in Step 1. For creating fact tables out of joins between dimensions and staging tables, consider using CETAS to materialize joined reference tables to a new file and then join to this single external table in subsequent queries. | N.A. |
 
 ## Star schema Diagram
-[Here](./diagrams/divvy_er.pdf) you can find the Star Schema for the Divvy Bikeshare Dataset project; generated using mermaid.js from the corresponding code in the file [divvy_er.mmd](./diagrams/divvy_er.mmd).
+[Here](./diagrams/divvy_erd.pdf) you can find the Star Schema for the Divvy Bikeshare Dataset project; generated using mermaid.js from the corresponding code in the file [divvy_erd.mmd](./diagrams/divvy_erd.mmd).
 ```mermaid
 erDiagram
     DIM_RIDER {
