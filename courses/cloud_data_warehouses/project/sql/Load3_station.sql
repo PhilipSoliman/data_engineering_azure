@@ -18,7 +18,7 @@ GO
 -- Uncomment to recreate table
 -- DROP EXTERNAL TABLE dbo.staging_station
 CREATE EXTERNAL TABLE dbo.staging_station (
-	[station_id] VARCHAR(50),
+	[station_key] VARCHAR(50),
 	[name] VARCHAR(75),
 	[latitude] FLOAT,
 	[longitude] FLOAT
