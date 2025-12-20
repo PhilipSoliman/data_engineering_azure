@@ -1,0 +1,67 @@
+erDiagram
+    DIM_RIDER {
+        int rider_id PK 
+        bigint rider_key "surrogate key"
+        string first
+        string last
+        string address
+        date birthday_date
+        int account_start_date_key "REFERENCES DIM_DATE(date_key)"
+        int account_end_date_key "REFERENCES DIM_DATE(date_key)"
+        bit is_member
+        int rider_age_at_account_start
+    }
+
+    STAGING_STATION {
+        string station_KEY PK "surrogate key"
+        string name
+        float latitude
+        float longitude
+    }
+
+    DIM_DATE {
+        int date_key PK "surrogate key"
+        date date_date
+        int year
+        int quarter
+        int month
+        int week_of_year
+        int weekday
+        bit is_weekend
+    }
+
+    DIM_TIME {
+        int time_key PK "surrogate key"
+        time time
+        int hour
+        int minute
+        string time_of_day
+        bit is_rush_hour
+    }
+
+    FACT_TRIP {
+        string trip_id
+        bigint rider_key "Rerences DIM_RIDER(rider_key)"
+        int start_date_key "Rerences DIM_DATE(date_key)"
+        int start_time_key "Rerences DIM_TIME(time_key)"
+        int end_date_key "Rerences DIM_DATE(date_key)"
+        int end_time_key "Rerences DIM_TIME(time_key)"
+        int trip_duration_minutes
+        string start_station_key "Rerences STAGING_STATION(station_KEY)"
+        string end_station_key "Rerences STAGING_STATION(station_KEY)"
+        int rider_age_at_trip_start
+    }
+
+    FACT_PAYMENT {
+        bigint payment_id PK 
+        int date_key "Rerences DIM_DATE(date_key)"
+        bigint rider_key "Rerences DIM_RIDER(rider_key)"
+        float amount
+    }
+
+    DIM_RIDER ||--o{ FACT_TRIP : "rider_key"
+    STAGING_STATION ||--o{ FACT_TRIP : "start_station_key / end_station_key"
+    DIM_DATE ||--o{ FACT_TRIP : "start_date_key / end_date_key"
+    DIM_TIME ||--o{ FACT_TRIP : "start_time_key / end_time_key"
+    DIM_RIDER ||--o{ FACT_PAYMENT : "rider_key"
+    DIM_DATE ||--o{ FACT_PAYMENT : "date_key"
