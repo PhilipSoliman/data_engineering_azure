@@ -26,6 +26,49 @@ To set up the development environment in editable mode:
 uv pip install -e .
 ```
 
+## Java (host) setup
+
+The Spark Docker images and the project's Dockerfiles use Java 11. If you plan
+to run PySpark locally (outside Docker), install a matching JDK on your host.
+
+Windows (recommended: Temurin / Adoptium OpenJDK 11):
+
+```powershell
+# Install via winget (Admin PowerShell)
+winget install --id EclipseAdoptium.Temurin.11.JDK -e
+
+# Or via Chocolatey (Admin PowerShell)
+choco install temurin11 -y
+
+# Set JAVA_HOME (replace with your actual install path) and add to PATH
+setx -m JAVA_HOME "C:\Program Files\Eclipse Adoptium\jdk-11.0.x"
+setx -m PATH "%PATH%;%JAVA_HOME%\bin"
+
+# Restart terminal/IDE, then verify
+java -version
+powershell -Command "echo $Env:JAVA_HOME"
+```
+
+Linux (Debian/Ubuntu example):
+
+```bash
+sudo apt update
+sudo apt install -y openjdk-11-jdk
+java -version
+```
+
+macOS (Homebrew):
+
+```bash
+brew install temurin11
+java -version
+```
+
+Notes:
+
+- If you only run Spark inside Docker containers, you don't need to install Java on the host — the container images include the JDK.
+- If you prefer configuring `JAVA_HOME` per-project, add `JAVA_HOME` to `src/.env` and the repository's `src/config.py` can read and set it for Python processes.
+
 ## Database Setup
 The application uses environment variables for database connections with defaults that match the provided Docker Compose configurations. 
 

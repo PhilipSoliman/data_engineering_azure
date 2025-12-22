@@ -1,6 +1,3 @@
 [submodule "pagila"]
 	path = pagila
 	url = https://github.com/devrimgunduz/pagila.git
-[submodule "docker/spark-lakehouse"]
-	path = docker/spark-lakehouse
-	url = git@github.com:karlchris/spark-docker.git
