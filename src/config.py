@@ -8,6 +8,7 @@ from typing import Optional
 from pydantic import ConfigDict, field_validator
 from pydantic_settings import BaseSettings
 
+JAVA_MAJOR_VERSION = 17  # should match the version of the spark JVM
 
 class Settings(BaseSettings):
     # Directories
@@ -20,17 +21,19 @@ class Settings(BaseSettings):
     )
 
     # Java installation path (for PySpark)
+    JAVA_MAJOR_VERSION: int = JAVA_MAJOR_VERSION # should match the version of the spark JVM
     JAVA_HOME: str = ""
 
-    @field_validator("JAVA_HOME")
+    @field_validator("JAVA_HOME", mode="after")
+    @classmethod
     def _validate_java_home(cls, v: str) -> str:
-        """Validate that Java is installed and is major version 11.
+        f"""Validate that Java is installed and is major version {JAVA_MAJOR_VERSION}.
 
         - If `JAVA_HOME` is provided, check for a `java` executable under its `bin` dir.
         - If empty, try to find `java` on PATH.
-        - Run `java -version` and parse the major version; require 11.
+        - Run `java -version` and parse the major version; require {JAVA_MAJOR_VERSION}.
         - If `JAVA_HOME` was empty and a suitable `java` is found, infer and return the JAVA_HOME.
-        Raises `ValueError` when Java 11 cannot be found or the version is incorrect.
+        Raises `ValueError` when Java {JAVA_MAJOR_VERSION} cannot be found or the version is incorrect.
         """
         # Try to locate java executable from provided JAVA_HOME
         java_exe = None
@@ -52,7 +55,7 @@ class Settings(BaseSettings):
 
         if not java_exe:
             raise ValueError(
-                "Java 11 not found. Set JAVA_HOME to a Java 11 installation or install Java 11."
+                f"Java not found. Set JAVA_HOME to a Java {JAVA_MAJOR_VERSION} installation or install Java {JAVA_MAJOR_VERSION}."
             )
 
         try:
@@ -74,8 +77,8 @@ class Settings(BaseSettings):
             )
 
         major = int(m.group(1))
-        if major != 11:
-            raise ValueError(f"Java major version {major} found; Java 11 is required.")
+        if major != JAVA_MAJOR_VERSION:
+            raise ValueError(f"Java major version {major} found; Java {JAVA_MAJOR_VERSION} is required.")
 
         # If JAVA_HOME wasn't provided, infer it from the java executable path
         if not v:
@@ -98,6 +101,9 @@ class Settings(BaseSettings):
             os.environ["PATH"] = bin_path + os.pathsep + cur_path
 
         return v
+
+    # Spark settings
+    SPARK_CLUSTER_DATA_DIR: str = "file:///opt/spark/data/"
 
     # PostgreSQL settings
     POSTGRES_DB_NAME: str = "postgres"
