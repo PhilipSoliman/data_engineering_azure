@@ -52,6 +52,7 @@ services:
       - ../../courses/data_lakes_and_lakehouses/spark-data:/opt/spark/data
     ports:
       - "15002:15002"
+      - "4041:4040" # Connect driver UI (host 4041 -> container 4040)
 
   spark-worker:
     container_name: spark-worker
