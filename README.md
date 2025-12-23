@@ -38,10 +38,10 @@ Windows (recommended: Temurin / Adoptium OpenJDK 11):
 winget install --id EclipseAdoptium.Temurin.11.JDK -e
 
 # Or via Chocolatey (Admin PowerShell)
-choco install temurin11 -y
+choco install temurin17 -y
 
 # Set JAVA_HOME (replace with your actual install path) and add to PATH
-setx -m JAVA_HOME "C:\Program Files\Eclipse Adoptium\jdk-11.0.x"
+setx -m JAVA_HOME "C:\Program Files\Eclipse Adoptium\jdk-17.0.x"
 setx -m PATH "%PATH%;%JAVA_HOME%\bin"
 
 # Restart terminal/IDE, then verify
@@ -53,14 +53,14 @@ Linux (Debian/Ubuntu example):
 
 ```bash
 sudo apt update
-sudo apt install -y openjdk-11-jdk
+sudo apt install -y openjdk-17-jdk
 java -version
 ```
 
 macOS (Homebrew):
 
 ```bash
-brew install temurin11
+brew install temurin17
 java -version
 ```
 
