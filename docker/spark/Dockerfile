@@ -49,6 +49,15 @@ RUN set -eux; \
     tar -xzf "spark-${SPARK_VERSION}-bin-hadoop3.tgz" -C "${SPARK_HOME}" --strip-components=1; \
     rm -rf "spark-${SPARK_VERSION}-bin-hadoop3.tgz"
 
+# Download Scala 2.12 stdlib and related modules (match Spark's _2.12 artifacts)
+RUN set -eux; \
+    curl -fSL -o /opt/spark/jars/scala-library-2.12.18.jar https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.12.18/scala-library-2.12.18.jar; \
+    curl -fSL -o /opt/spark/jars/scala-compiler-2.12.18.jar https://repo1.maven.org/maven2/org/scala-lang/scala-compiler/2.12.18/scala-compiler-2.12.18.jar; \
+    curl -fSL -o /opt/spark/jars/scala-reflect-2.12.18.jar https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.12.18/scala-reflect-2.12.18.jar
+
+# Ensure Spark JVM picks up the scala jars
+ENV SPARK_DIST_CLASSPATH=/opt/spark/jars/scala-library-2.12.18.jar:/opt/spark/jars/scala-reflect-2.12.18.jar:/opt/spark/jars/scala-compiler-2.12.18.jar
+
 # Add spark binaries to shell and enable execution
 RUN chmod u+x /opt/spark/sbin/* && \
     chmod u+x /opt/spark/bin/*
