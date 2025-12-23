@@ -3,11 +3,11 @@ FROM python:3.12.9-bullseye AS spark-base
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
       sudo \
-      curl \
-      vim \
-      unzip \
-      rsync \
-      openjdk-11-jdk \
+        curl \
+            vim \
+            unzip \
+            rsync \
+            openjdk-17-jdk \
       build-essential \
       software-properties-common \
       ssh && \
@@ -17,16 +17,19 @@ RUN apt-get update && \
 ## Download spark and hadoop dependencies and install
 
 # Build-time and runtime variables with defaults
-ARG SPARK_VERSION=3.5.7
+ARG SPARK_VERSION=4.0.1
 ENV SPARK_VERSION=${SPARK_VERSION}
 
 ARG SPARK_HOME=/opt/spark
 ENV SPARK_HOME=${SPARK_HOME}
 ENV HADOOP_HOME=${HADOOP_HOME:-"/opt/hadoop"}
 
+# Ensure Java 17 is used (Spark 3.5+ may require Java 17)
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV PATH="$JAVA_HOME/bin:$PATH"
+
 ENV SPARK_MASTER_PORT=7077
 ENV SPARK_MASTER_HOST=spark-master
-ENV SPARK_MASTER="spark://$SPARK_MASTER_HOST:$SPARK_MASTER_PORT"
 
 ENV PYTHONPATH=$SPARK_HOME/python/:$PYTHONPATH
 ENV PYSPARK_PYTHON=python3
@@ -57,12 +60,12 @@ COPY conf/spark-defaults.conf "$SPARK_HOME/conf/"
 
 FROM spark-base AS pyspark
 
-# Install python deps
-COPY requirements.txt .
-RUN pip3 install -r requirements.txt
+# # Install python deps
+# COPY requirements.txt .
+# RUN pip3 install -r requirements.txt
 
 
-FROM pyspark AS pyspark-runner
+FROM spark-base AS pyspark-runner
 
 # Download iceberg spark runtime
 RUN curl https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.4_2.12/1.4.3/iceberg-spark-runtime-3.4_2.12-1.4.3.jar -Lo /opt/spark/jars/iceberg-spark-runtime-3.4_2.12-1.4.3.jar
