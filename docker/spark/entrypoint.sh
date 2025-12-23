@@ -12,6 +12,10 @@ elif [[ $SPARK_WORKLOAD =~ "worker" ]];
 # try "worker-1", "worker-2" etc.
 then
   start-worker.sh spark://spark-master:7077
+elif [ "$SPARK_WORKLOAD" == "connect" ] || [ "$SPARK_WORKLOAD" == "connect-server" ]
+then
+  # start the Spark Connect server (accepts remote Spark Connect sessions)
+  sbin/start-connect-server.sh || /opt/spark/sbin/start-connect-server.sh
 elif [ "$SPARK_WORKLOAD" == "history" ]
 then
   start-history-server.sh
