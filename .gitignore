@@ -18,3 +18,6 @@
 
 # ignore large data files
 courses/cloud_data_warehouses/project/data
+
+# spark history server logs
+courses/data_lakes_and_lakehouses/spark-logs
