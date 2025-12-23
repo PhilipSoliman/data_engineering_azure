@@ -1,4 +1,4 @@
-FROM python:3.12.9-bullseye AS spark-base
+FROM --platform=linux/amd64 python:3.11.14-slim-bookworm AS spark-base
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -32,7 +32,7 @@ ENV SPARK_MASTER_PORT=7077
 ENV SPARK_MASTER_HOST=spark-master
 
 ENV PYTHONPATH=$SPARK_HOME/python/:$PYTHONPATH
-ENV PYSPARK_PYTHON=python3
+ENV PYSPARK_PYTHON=python3.11
 
 # Add iceberg spark runtime jar to IJava classpath
 ENV IJAVA_CLASSPATH=/opt/spark/jars/*
