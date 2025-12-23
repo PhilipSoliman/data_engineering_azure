@@ -5,8 +5,9 @@ from pyspark.sql import SparkSession
 # Connect to the Dockerized Spark standalone master (port 7077 per docker-compose)
 def get_spark_session(app_name: str) -> SparkSession:
     spark = (
-        SparkSession.builder.remote("sc://localhost:15002")  # type: ignore
-        .appName(app_name)
+        SparkSession.builder.remote("sc://localhost:15002").appName(  # type: ignore
+            app_name
+        )
         # # When running the Python driver on Windows and Spark workers in Docker,
         # # advertise the host machine so executors can connect back to the driver.
         # # Docker Desktop exposes the host as `host.docker.internal` on Linux containers.
@@ -17,5 +18,7 @@ def get_spark_session(app_name: str) -> SparkSession:
         # .config("spark.driver.port", "49992")
         .getOrCreate()
     )
-    print(f"Connected to Spark app {spark.conf.get('spark.app.name')} (v. {spark.version})")
+    print(
+        f"Connected to Spark app {spark.conf.get('spark.app.name')} (v. {spark.version})"
+    )
     return spark

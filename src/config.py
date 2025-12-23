@@ -10,6 +10,7 @@ from pydantic_settings import BaseSettings
 
 JAVA_MAJOR_VERSION = 17  # should match the version of the spark JVM
 
+
 class Settings(BaseSettings):
     # Directories
     PROJECT_DIR: Path = Path(__file__).resolve().parent.parent
@@ -21,7 +22,9 @@ class Settings(BaseSettings):
     )
 
     # Java installation path (for PySpark)
-    JAVA_MAJOR_VERSION: int = JAVA_MAJOR_VERSION # should match the version of the spark JVM
+    JAVA_MAJOR_VERSION: int = (
+        JAVA_MAJOR_VERSION  # should match the version of the spark JVM
+    )
     JAVA_HOME: str = ""
 
     @field_validator("JAVA_HOME", mode="after")
@@ -78,7 +81,9 @@ class Settings(BaseSettings):
 
         major = int(m.group(1))
         if major != JAVA_MAJOR_VERSION:
-            raise ValueError(f"Java major version {major} found; Java {JAVA_MAJOR_VERSION} is required.")
+            raise ValueError(
+                f"Java major version {major} found; Java {JAVA_MAJOR_VERSION} is required."
+            )
 
         # If JAVA_HOME wasn't provided, infer it from the java executable path
         if not v:
