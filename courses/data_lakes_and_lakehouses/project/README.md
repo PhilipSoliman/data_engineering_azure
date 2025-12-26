@@ -64,8 +64,9 @@ erDiagram
         int rider_age_at_account_start
     }
 
-    STAGING_STATION {
-        string station_KEY PK "surrogate key"
+    DIM_STATION {
+        int station_id PK
+        string station_KEY "surrogate key"
         string name
         float latitude
         float longitude
@@ -99,8 +100,8 @@ erDiagram
         int end_date_key "Rerences DIM_DATE(date_key)"
         int end_time_key "Rerences DIM_TIME(time_key)"
         int trip_duration_minutes
-        string start_station_key "Rerences STAGING_STATION(station_KEY)"
-        string end_station_key "Rerences STAGING_STATION(station_KEY)"
+        string start_station_key "Rerences DIM_STATION(station_KEY)"
+        string end_station_key "Rerences DIM_STATION(station_KEY)"
         int rider_age_at_trip_start
     }
 
@@ -112,7 +113,7 @@ erDiagram
     }
 
     DIM_RIDER ||--o{ FACT_TRIP : "rider_key"
-    STAGING_STATION ||--o{ FACT_TRIP : "start_station_key / end_station_key"
+    DIM_STATION ||--o{ FACT_TRIP : "start_station_key / end_station_key"
     DIM_DATE ||--o{ FACT_TRIP : "start_date_key / end_date_key"
     DIM_TIME ||--o{ FACT_TRIP : "start_time_key / end_time_key"
     DIM_RIDER ||--o{ FACT_PAYMENT : "rider_key"
