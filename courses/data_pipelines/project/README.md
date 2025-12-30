@@ -1,0 +1,23 @@
+# NYC Data Analytics Platform
+The City of New York would like to develop a Data Analytics platform on Azure Synapse Analytics to accomplish two primary objectives:
+
+Analyze how the City's financial resources are allocated and how much of the City's budget is being devoted to overtime.
+Make the data available to the interested public to show how the City’s budget is being spent on salary and overtime pay for all municipal employees.
+You have been hired as a Data Engineer to create high-quality data pipelines that are dynamic, can be automated, and monitored for efficient operation. The project team also includes the city’s quality assurance experts who will test the pipelines to find any errors and improve overall data quality.
+
+The source data resides in Azure Data Lake and needs to be processed in a NYC data warehouse. The source datasets consist of CSV files with Employee master data and monthly payroll data entered by various City agencies.
+
+## Requirements
+Use this project rubric to understand and assess the project criteria.
+
+| Criteria | Submission Requirements | Deliverable |
+|---|---|---|
+| **1. Linked Services** <br> The learner will be able to create a Linked Service to configure a connection to Azure Data Lake Gen2 containing master data and payroll data. | A Linked Service object is present in the data pipeline repository of type "AzureBlobFS" that configures a connection to Azure Data Lake Gen2 containing master data and payroll data. | ... |
+| **2. Linked Services** <br> The learner will be able to create a Linked Service in Azure Data Factory from Azure SQL Database to configure a connection to Azure SQL Database containing master data and payroll data. | A Linked Service object is present in the data pipeline repository of type "AzureSQLDatabase" that configures a connection to Azure SQL Database containing master data and payroll data. | ... |
+| **3. Datasets**<br> The learner will be able to create datasets to provide views of master data and payroll data in Azure Data Lake Gen2. | Multiple dataset objects are present in the data pipeline repository of type "AzureBlobFSLocation" with schemas from "AgencyMaster.csv", "TitleMaster.csv", "EmpMaster.csv", “nycpayroll_2020.csv” and "nycpayroll_2021.csv" to provide datasets for data views from Azure Data Lake Gen2. | ... |
+| **4. Datasets**<br> The learner will be able to create a dataset to provide a view of master data and payroll data in the Azure SQL DB table. | Multiple dataset objects are present in the data pipeline repository of type "AzureSqlTable" with schemas from the NYC Payroll Data, Agency, Employee, Title SQL DB tables SQL DB tables to provide a dataset for a data view. | ... |
+| **5. Data Flows**<br> The learner will be able to create data flows to aggregate payroll data from Azure SQL DB and NYC Payroll history files o the SQL DB destination table and dirstaging Datalake Gen2 storage. | A Dataflow object is present in the data pipeline repository of type "MappingDataFlow" with a union to create a derived aggregated column with the total amount paid to an employee (TotalPaid = RegularGrossPaid + TotalOTPaid + TotalOtherPay). The data sources for this aggregate column should be the data from Azure SQL DB tables | ... |
+| **6. Data Flows**<br> The learner should be able to create data flows to move data from one data storage system to another. | Multiple Dataflow objects are present in the data pipeline repository of type "MappingDataFlow". Data flows should map data in datasets from Azure Data Lake Gen2 to Azure SQL DB. Data flows should map data from Azure SQL DB and Data Lake Gen2 to move it to the Data Lake staging directory and SQL DB destination table. | ... |
+| **7. Pipeline**<br> The student will be able to create a data pipeline containing Dataflow activities. | Multiple pipeline objects are present in the data pipeline repository with activities of type "ExecuteDataFlow" in the pipeline directory which contain Dataflow objects. | ... |
+| **8. Pipeline**<br> The learner should be able to trigger a pipeline and execute the Dataflows in it. | A screenshot is present showing a successful pipeline execution in Azure Data Factory | ... |
+| **9. Data Verification**<br> The student will be able to verify the final data after pipeline run in Datalake Gen2 storage, SQL DB table and Synapse table | Screenshots are present to show the data is saved in Gen2 storage, and query on SQL DB table and Synapse external table returns results. | ... |
