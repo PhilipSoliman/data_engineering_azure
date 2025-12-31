@@ -21,3 +21,33 @@ Use this project rubric to understand and assess the project criteria.
 | **7. Pipeline**<br> The student will be able to create a data pipeline containing Dataflow activities. | Multiple pipeline objects are present in the data pipeline repository with activities of type "ExecuteDataFlow" in the pipeline directory which contain Dataflow objects. | ... |
 | **8. Pipeline**<br> The learner should be able to trigger a pipeline and execute the Dataflows in it. | A screenshot is present showing a successful pipeline execution in Azure Data Factory | ... |
 | **9. Data Verification**<br> The student will be able to verify the final data after pipeline run in Datalake Gen2 storage, SQL DB table and Synapse table | Screenshots are present to show the data is saved in Gen2 storage, and query on SQL DB table and Synapse external table returns results. | ... |
+
+
+## Create and configure resources
+1. Create the data lake and upload data: <span style="color: green;">✓</span>. ![](../images/data_lake_uploaded_files_history.png) ![](../images/data_lake_uploaded_files_payroll.png)
+2. Create an Azure Data Factory Resource: <span style="color: green;">✓</span>.
+3. Create a SQL Database <span style="color: green;">✓</span>.
+4. Create Synapse Analytics Workspace and configure external table: <span style="color: green;">✓</span>. 
+5. Create summary data external table in Synapse Analytics workspace: <span style="color: green;">✓</span>. See [create_external_table.sql](./sql/create_external_table.sql) and ![](../images/external_table_created_in_synapse.png)
+6. Create master data tables and payroll transaction tables in SQL DB: <span style="color: green;">✓</span>. See [create_master_tables.sql](./sql/create_master_tables.sql) and ![](../images/tables_in_sql_db.png)
+
+## Create linked services
+1.Create a Linked Service for Azure Data Lake: <span style="color: green;">✓</span>. ![](../images/adl_config_adf.png)
+2. Create a Linked Service to SQL Database that has the current (2021) data: <span style="color: green;">✓</span>. ![](../images/asqldb_config_adf.png)
+3. Screenshot of all linked services in ADF: <span style="color: green;">✓</span>. ![](../images/linked_services_in_adf.png)
+
+## Step 3: Create datasets in ADF
+1. Create the datasets for the 2021 Payroll file on Azure Data Lake Gen2: <span style="color: green;">✓</span>.
+2. Repeat the same process to create datasets for the rest of the data files in the Data Lake: <span style="color: green;">✓</span>.
+3. Create the dataset for all the data tables in SQL DB: <span style="color: green;">✓</span>.
+4. Create the datasets for destination (target) table in Synapse Analytics: <span style="color: green;">✓</span>.
+5. Capture screenshots of datasets in Data Factory: <span style="color: green;">✓</span>. ![](../images/datasets_in_adf.png)
+6. Save configs of datasets from Data Factory: <span style="color: green;">✓</span>. See [datasets](./datasets/) folder.
+
+## Step 4: Create Data Flows
+1. Create a new data flow: <span style="color: green;">✓</span>.
+2. Select the dataset for 2020 payroll file as the source: <span style="color: green;">✓</span>.
+3. Click on the + icon at the bottom right of the source, from the options choose sink. A sink will get added in the dataflow: <span style="color: green;">✓</span>.
+4. Select the sink dataset as 2020 payroll table created in SQL db: <span style="color: green;">✓</span>.
+5. Repeat the same process to add data flow to load data for each file in Azure DataLake to the corresponding SQL DB tables: <span style="color: green;">✓</span>.6. Capture screenshots of data flows in Data Factory: <span style="color: green;">✓</span>. ![](../images/dataflows_in_adf.png)
+7. Save configs of data flows from Data Factory: <span style="color: green;">✓</span>. See [dataflows](./dataflows/) folder.

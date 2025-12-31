@@ -1,0 +1,54 @@
+{
+    "name": "titlemaster",
+    "properties": {
+        "type": "MappingDataFlow",
+        "typeProperties": {
+            "sources": [
+                {
+                    "dataset": {
+                        "referenceName": "TitleMaster",
+                        "type": "DatasetReference"
+                    },
+                    "name": "titlemaster"
+                }
+            ],
+            "sinks": [
+                {
+                    "dataset": {
+                        "referenceName": "NYC_Payroll_TITLE_MD",
+                        "type": "DatasetReference"
+                    },
+                    "name": "sink1"
+                }
+            ],
+            "transformations": [],
+            "scriptLines": [
+                "source(output(",
+                "          TitleCode as integer,",
+                "          TitleDescription as string",
+                "     ),",
+                "     allowSchemaDrift: true,",
+                "     validateSchema: false,",
+                "     ignoreNoFilesFound: false) ~> titlemaster",
+                "titlemaster sink(allowSchemaDrift: true,",
+                "     validateSchema: false,",
+                "     input(",
+                "          TitleCode as string,",
+                "          TitleDescription as string",
+                "     ),",
+                "     deletable:false,",
+                "     insertable:true,",
+                "     updateable:false,",
+                "     upsertable:false,",
+                "     format: 'table',",
+                "     skipDuplicateMapInputs: true,",
+                "     skipDuplicateMapOutputs: true,",
+                "     errorHandlingOption: 'stopOnFirstError',",
+                "     mapColumn(",
+                "          TitleCode,",
+                "          TitleDescription",
+                "     )) ~> sink1"
+            ]
+        }
+    }
+}
