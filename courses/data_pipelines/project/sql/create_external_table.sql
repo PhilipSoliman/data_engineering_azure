@@ -16,7 +16,7 @@ GO
 IF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'udacitydip_nycpayroll_dfs_core_windows_net')
 BEGIN
     CREATE EXTERNAL DATA SOURCE [udacitydip_nycpayroll_dfs_core_windows_net] WITH (
-        LOCATION = 'https://udacitydipstore.dfs.core.windows.net/adlsnycpayroll-philip-s/dirstaging'
+        LOCATION = 'https://udacitydipstorage.dfs.core.windows.net/adlsnycpayroll-philip-s/dirstaging'
     );
 END
 GO
@@ -25,8 +25,9 @@ IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseDeli
     CREATE EXTERNAL FILE FORMAT [SynapseDelimitedTextFormat] 
     WITH ( FORMAT_TYPE = DELIMITEDTEXT,
            FORMAT_OPTIONS (
-             FIELD_TERMINATOR = ',',
-             USE_TYPE_DEFAULT = FALSE
+            FIELD_TERMINATOR = ',',
+            FIRST_ROW = 1,
+            USE_TYPE_DEFAULT = FALSE
             ))
 GO
 
@@ -36,9 +37,9 @@ BEGIN
 END
 GO
 CREATE EXTERNAL TABLE [dbo].[NYC_Payroll_Summary](
-    [FiscalYear] [int] NULL,
+    [FiscalYear] [varchar](10) NULL,
     [AgencyName] [varchar](50) NULL,
-    [TotalPaid] [float] NULL
+    [TotalPaid] [varchar](10) NULL
 )
 WITH (
     LOCATION = '/',
