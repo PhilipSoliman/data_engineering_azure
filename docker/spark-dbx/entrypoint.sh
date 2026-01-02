@@ -34,6 +34,7 @@ case "$SPARK_WORKLOAD" in
     exec start-history-server.sh
     ;;
   thrift|thriftserver)
+    
     # Wait for metastore DB to be ready
     echo "Waiting for metastore-db to be ready..."
     until PGPASSWORD=hive psql -h metastore-db -U hive -d hive_metastore -c '\q' 2>/dev/null; do
@@ -42,14 +43,20 @@ case "$SPARK_WORKLOAD" in
     done
     echo "Postgres is up - checking schema"
     
-    # Check if VERSION table exists; if not, initialize schema
-    PGPASSWORD=hive psql -h metastore-db -U hive -d hive_metastore -c "SELECT * FROM \"VERSION\" LIMIT 1;" 2>/dev/null || {
-      echo "VERSION table not found - initializing Hive metastore schema..."
-      schematool -dbType postgres -initSchema -userName hive -passWord hive \
-        -url jdbc:postgresql://metastore-db:5432/hive_metastore || echo "schematool failed (continuing anyway)"
-    }
+    # Check if VERSION table has data (not just if it exists)
+    VERSION_COUNT=$(PGPASSWORD=hive psql -h metastore-db -U hive -d hive_metastore -t -c "SELECT COUNT(*) FROM \"VERSION\";" 2>/dev/null | tr -d ' \n')
     
-    exec start-thriftserver.sh --master spark://spark-master:${SPARK_MASTER_PORT:-7077} --hiveconf hive.server2.enable.doAs=false
+    exec start-thriftserver.sh \
+      --master spark://spark-master:${SPARK_MASTER_PORT:-7077} \
+      --hiveconf hive.server2.enable.doAs=false \
+      --hiveconf hive.metastore.schema.verification=false \
+      --hiveconf hive.metastore.uris="" \
+      --hiveconf javax.jdo.option.ConnectionURL=jdbc:postgresql://metastore-db:5432/hive_metastore \
+      --hiveconf javax.jdo.option.ConnectionDriverName=org.postgresql.Driver \
+      --hiveconf javax.jdo.option.ConnectionUserName=hive \
+      --hiveconf javax.jdo.option.ConnectionPassword=hive \
+      --hiveconf datanucleus.schema.autoCreateAll=true \
+      --hiveconf datanucleus.fixedDatastore=false
     ;;
   *)
     exec "$@"
