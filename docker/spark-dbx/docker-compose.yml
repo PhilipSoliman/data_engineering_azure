@@ -1,0 +1,119 @@
+services:
+  metastore-db:
+    image: postgres:15
+    container_name: spark-metastore-db
+    environment:
+      POSTGRES_DB: hive_metastore
+      POSTGRES_USER: hive
+      POSTGRES_PASSWORD: hive
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hive -d hive_metastore"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    ports:
+      - "5432:5432"
+    volumes:
+      - metastore-data:/var/lib/postgresql/data
+
+  spark-master:
+    container_name: spark-dbx-master
+    build: .
+    image: spark-dbx
+    entrypoint: ["/opt/spark/entrypoint.sh", "master"]
+    depends_on:
+      - metastore-db
+    environment:
+      SPARK_NO_DAEMONIZE: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+    volumes:
+      - ../../courses/databricks/dbfs:/dbfs
+      - ../../courses/databricks/spark-data:/opt/spark/data
+      - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+      - ../../courses/databricks/init-scripts:/databricks/init
+    ports:
+      - "8080:8080" # Spark master Web UI
+      - "7077:7077" # Master service
+      - "4040:4040" # Driver UI (master)
+      - "15002:15002" # Spark Connect
+
+  spark-history-server:
+    container_name: spark-dbx-history
+    image: spark-dbx
+    entrypoint: ["/opt/spark/entrypoint.sh", "history"]
+    depends_on:
+      - spark-master
+    environment:
+      SPARK_NO_DAEMONIZE: "true"
+    volumes:
+      - ../../courses/databricks/dbfs:/dbfs
+      - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+    ports:
+      - "18080:18080"
+
+  spark-connect:
+    container_name: spark-dbx-connect
+    image: spark-dbx
+    entrypoint: ["/opt/spark/entrypoint.sh", "connect"]
+    depends_on:
+      - spark-master
+    environment:
+      SPARK_NO_DAEMONIZE: "true"
+    volumes:
+      - ../../courses/databricks/dbfs:/dbfs
+      - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+      - ../../courses/databricks/init-scripts:/databricks/init
+    ports:
+      - "15003:15002" # Connect server gRPC
+      - "4041:4040" # Driver UI (connect)
+
+  spark-worker-1:
+    container_name: spark-dbx-worker-1
+    image: spark-dbx
+    entrypoint: ["/opt/spark/entrypoint.sh", "worker"]
+    depends_on:
+      - spark-master
+    environment:
+      SPARK_NO_DAEMONIZE: "true"
+    volumes:
+      - ../../courses/databricks/dbfs:/dbfs
+      - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+      - ../../courses/databricks/init-scripts:/databricks/init
+
+  spark-worker-2:
+    container_name: spark-dbx-worker-2
+    image: spark-dbx
+    entrypoint: ["/opt/spark/entrypoint.sh", "worker"]
+    depends_on:
+      - spark-master
+    environment:
+      SPARK_NO_DAEMONIZE: "true"
+    volumes:
+      - ../../courses/databricks/dbfs:/dbfs
+      - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+      - ../../courses/databricks/init-scripts:/databricks/init
+
+  spark-thrift:
+    container_name: spark-dbx-thrift
+    image: spark-dbx
+    entrypoint: ["/opt/spark/entrypoint.sh", "thrift"]
+    depends_on:
+      spark-master:
+        condition: service_healthy
+      metastore-db:
+        condition: service_healthy
+    environment:
+      SPARK_NO_DAEMONIZE: "true"
+    volumes:
+      - ../../courses/databricks/dbfs:/dbfs
+      - ./conf/spark-defaults.conf:/opt/spark/conf/spark-defaults.conf
+      - ../../courses/databricks/init-scripts:/databricks/init
+    ports:
+      - "10000:10000" # ThriftServer JDBC/ODBC
+
+volumes:
+  metastore-data:
